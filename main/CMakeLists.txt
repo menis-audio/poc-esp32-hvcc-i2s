@@ -1,5 +1,7 @@
 idf_component_register(
     SRCS "ime-embarcados-lib.cpp"
+         "switch.cpp"
+         "adc.cpp"
          "DaisySP/Source/Control/adenv.cpp"
          "DaisySP/Source/Control/adsr.cpp"
          "DaisySP/Source/Control/phasor.cpp"
