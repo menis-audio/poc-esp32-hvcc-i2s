@@ -51,7 +51,7 @@ extern "C" void app_main(void)
     adc.ConfigureSmoothing(0.09f, 500); // alpha = 0.1, update every 500 calls
 
     // Init Switch (GPIO13)
-    btn.Init(GPIO_NUM_13, Switch::TYPE_MOMENTARY, Switch::POLARITY_INVERTED);
+    btn.Init(GPIO_NUM_13, Switch::TYPE_MOMENTARY, Switch::POLARITY_NORMAL);
 
     while (1)
     {
