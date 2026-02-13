@@ -153,6 +153,128 @@ sudo chmod a+rw /dev/ttyUSB0
 
 *substituindo `<username>` pelo seu nome de usuário.*
 
+### Ferramentas Python (hvcc)
+
+Em sistemas Debian/Ubuntu recentes, o `pip3` do sistema é "gerenciado externamente" (PEP 668) e não deve ser usado para instalar pacotes globalmente. Para usar o compilador `hvcc` dentro do repositório de forma reproduzível, há duas opções seguras:
+
+- Opção A — pipx (para instalar a ferramenta como aplicativo):
+
+```bash
+sudo apt-get install pipx
+pipx install hvcc
+# usar
+hvcc --help
+```
+
+- Opção B — ambiente virtual por repositório (recomendado para colaboração):
+
+```bash
+# prepara o venv e instala dependências (hvcc)
+bash scripts/setup-python.sh
+
+# usar via wrapper do repositório
+bash scripts/hvcc.sh --help
+
+# ou ativar manualmente
+source .venv/bin/activate
+hvcc --help
+```
+
+Observação: Não use `pip3 install hvcc` globalmente nem `--break-system-packages`. Use `pipx` ou o venv do repositório.
+
+## Prova de Conceito: rodar um patch Pure Data com hvcc no ESP32
+
+Esta PoC compila um patch simples do Pure Data com o `hvcc` e toca o áudio via I2S no ESP32.
+
+### Visão geral
+- Patch PD de teste em [main/pd/_main.pd](main/pd/_main.pd)
+- Nome do patch Heavy: `mySynth` (definido em [main/hv_config.h](main/hv_config.h))
+- Código gerado pelo `hvcc` em [main/hvcc/c](main/hvcc/c)
+- Saída de áudio I2S em 48 kHz: BCLK=GPIO27, WS=GPIO26, DOUT=GPIO25 (ver [main/config.h](main/config.h))
+
+### Passo a passo (Linux)
+1) Preparar ambiente ESP-IDF (se ainda não está no PATH):
+```bash
+. $HOME/esp/esp-idf/export.sh
+```
+
+2) Preparar Python e instalar `hvcc` no venv do repositório:
+```bash
+bash scripts/setup-python.sh
+bash scripts/hvcc.sh -V
+```
+
+3) (Opcional) Editar o patch PD de teste:
+- Abra e ajuste [main/pd/_main.pd](main/pd/_main.pd). O patch atual é `osc~ 220` → `*~ 0.1` → `dac~`.
+
+4) Gerar o código C/C++ do Heavy com `hvcc`:
+```bash
+# gera para a pasta main/hvcc/c usando o nome do patch mySynth
+bash scripts/hvcc.sh -n mySynth -g c -o main/hvcc/c main/pd/_main.pd
+```
+
+5) Compilar o projeto:
+```bash
+idf.py build
+```
+- Dica: quando a pasta `main/hvcc/c` existe, o build inclui automaticamente os fontes gerados e define `HV_ENABLED=1`.
+
+6) Conectar o ESP32 e fazer flash:
+```bash
+# deixe o ESP32 conectado; se necessário, informe a porta manualmente
+idf.py flash              # auto-detecção
+# ou
+idf.py -p /dev/ttyUSB0 flash
+```
+
+7) Abrir o monitor serial para ver os logs de boot:
+```bash
+idf.py monitor -p /dev/ttyUSB0
+```
+- Você deverá ouvir um tom de 220 Hz em nível baixo (ganho 0.1). Se o volume estiver muito baixo, veja a seção "Ajustar nível" abaixo.
+
+### Fiação I2S (DAC)
+- BCLK: GPIO27
+- WS/LRCLK: GPIO26
+- DOUT: GPIO25
+- 3V3 → 3V0, GND → GND
+- Ver [main/config.h](main/config.h) para confirmar/mudar pinos e taxa de amostragem.
+
+### Ajustar nível
+- O envio para I2S aplica uma redução extra de 0.5 para evitar clip.
+- Para aumentar o volume, edite `to_audio_write()` em [main/config.h](main/config.h) e altere `* 0.5f` para `* 1.0f`.
+- Alternativamente, aumente o ganho no patch PD (por exemplo, `*~ 0.2`).
+
+### Troubleshooting
+- Porta serial ocupada/inexistente:
+  - Feche `idf.py monitor` antes de `idf.py flash`.
+  - Liste portas disponíveis:
+    ```bash
+    ls -l /dev/ttyUSB* /dev/ttyACM*
+    ```
+  - Informe explicitamente: `idf.py -p /dev/ttyUSB0 flash`.
+  - Permissões: adicione seu usuário ao grupo `dialout` e replugue o dispositivo:
+    ```bash
+    sudo usermod -aG dialout "$USER"
+    # depois, desconecte e reconecte o ESP32
+    ```
+- Sem som:
+  - Verifique fiação dos pinos (BCLK/WS/DOUT) e taxa de amostragem.
+  - Confirme que `main/hvcc/c` contém `Heavy_mySynth.*` e que o build definiu `HV_ENABLED`.
+  - Aumente o ganho conforme seção acima.
+- `hvcc` não encontrado:
+  - Rode `bash scripts/setup-python.sh` e use o wrapper `bash scripts/hvcc.sh`.
+
+### Comandos rápidos
+```bash
+# preparar ambiente
+. $HOME/esp/esp-idf/export.sh && bash scripts/setup-python.sh
+# gerar heavy
+bash scripts/hvcc.sh -n mySynth -g c -o main/hvcc/c main/pd/_main.pd
+# build + flash + monitor
+idf.py build && idf.py -p /dev/ttyUSB0 flash && idf.py -p /dev/ttyUSB0 monitor
+```
+
 ### Windows
 
 Crie uma pasta que usará para seus projetos, navegue até ela e clone nosso repositório `ime-embarcados-lib` com o comando

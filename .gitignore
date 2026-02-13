@@ -2,3 +2,7 @@ build/
 *.old
 sdkconfig
 
+# Python virtual environment and caches
+.venv/
+**/__pycache__/
+

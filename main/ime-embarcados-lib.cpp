@@ -1,32 +1,33 @@
 #include "driver/i2s_std.h"
 #include "freertos/FreeRTOS.h"
 #include "config.h"
-#include "../DaisySP/Source/daisysp.h"
 
-using namespace daisysp;
-Oscillator osc;
-Phasor phasor;
-uint32_t sr = 48000;
+#ifdef HV_ENABLED
+#include "hv_bridge.h"
+#endif
+
+static uint32_t sr = 48000;
+
 void audio_callback()
 {
-    float osc_out = osc.Process();
-    osc.SetFreq(phasor.Process()*10000);
-    to_audio_write(osc_out, osc_out);
+#ifdef HV_ENABLED
+    float l, r;
+    hv_process_one(l, r);
+    to_audio_write(l, r);
+#else
+    // Fallback: silence when HVCC patch is not present
+    to_audio_write(0.0f, 0.0f);
+#endif
 }
-
 
 extern "C" void app_main(void)
 {
-    osc.Init(sr);
-    osc.SetWaveform(osc.WAVE_SIN);
-    osc.SetFreq(220);
-    osc.SetAmp(1);
-    phasor.Init(sr);
-    phasor.SetFreq(0.5f);
     audio_init(sr);
-
+#ifdef HV_ENABLED
+    hv_init_bridge(sr);
+#endif
     while (1)
-    {        
+    {
         audio_callback();
     }
 }
