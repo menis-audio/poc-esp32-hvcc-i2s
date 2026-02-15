@@ -1,0 +1,19 @@
+# ESP-IDF
+build/
+sdkconfig.old
+# Optional: ignore generated config; remove if you want it tracked
+# sdkconfig
+
+# Tooling / editor
+.vscode/
+.idea/
+*.code-workspace
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+
+# Misc
+*.log
+.ccls-cache/
