@@ -1,7 +1,7 @@
 #N canvas 827 239 734 565 12;
 #X obj 1335 691 dac~;
 #X obj 1335 650 *~ 0.1;
-#X obj 1335 557 phasor~ 220;
+#X obj 1335 557 osc~ 220;
 #X connect 1 0 0 0;
 #X connect 1 0 0 1;
 #X connect 2 0 1 0;

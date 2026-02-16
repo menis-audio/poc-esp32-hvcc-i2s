@@ -35,9 +35,9 @@
 
 // object includes
 #include "HeavyContext.hpp"
-#include "HvSignalPhasor.h"
-#include "HvSignalVar.h"
 #include "HvMath.h"
+#include "HvSignalVar.h"
+#include "HvSignalPhasor.h"
 
 class Heavy_heavy : public HeavyContext {
 
@@ -73,7 +73,7 @@ class Heavy_heavy : public HeavyContext {
   // static sendMessage functions
 
   // objects
-  SignalPhasor sPhasor_TVDbuSdw;
+  SignalPhasor sPhasor_v6LXxBSD;
 };
 
 #endif // _HEAVY_CONTEXT_HEAVY_HPP_
