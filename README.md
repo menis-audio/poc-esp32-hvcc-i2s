@@ -78,3 +78,17 @@ This project includes a `.gitignore` that excludes build outputs and HVCC-genera
 - HVCC / Heavy by Enzien Audio.
 - ESP-IDF by Espressif Systems.
 
+## Community & Context
+This proof of concept was created following a Discord discussion with collaborators who suggested iterating via HVCC external generators for easier development. The implementation draws inspiration from an ESP8266 example shared by "dreamer" and aims to serve as a base to explore more generators and targets.
+
+- Goal: a simple starting point to study HVCC generators and iterate quickly.
+- Feedback: please open issues and suggestions on the public repo.
+- Repo: https://github.com/menis-audio/poc-esp32-hvcc-i2s
+- References:
+    - HVCC external generator docs: https://wasted-audio.github.io/hvcc/docs/03.gen.external.html
+    - ESP32 HVCC reference: https://github.com/sinneb/esp32-hvcc
+    - ESP8266 Heavy example: https://github.com/Simon-L/heavy_esp8266
+    - Pure Data on Arduino Audio Tools: https://github.com/pschatzmann/arduino-audio-tools/wiki/Pure-Data
+
+Thanks to everyone for the helpful pointers and shared code. Any questions or critiques are welcome—I'll respond as soon as possible.
+
