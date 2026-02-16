@@ -170,7 +170,7 @@ char *msg_toString(const HvMessage *m) {
       case HV_MSG_BANG: len[i] = hv_snprintf(NULL, 0, "%s", "bang") + 1; break;
       case HV_MSG_FLOAT: len[i] = hv_snprintf(NULL, 0, "%g", msg_getFloat(m, i)) + 1; break;
       case HV_MSG_SYMBOL: len[i] = hv_snprintf(NULL, 0, "%s", msg_getSymbol(m, i)) + 1; break;
-      case HV_MSG_HASH: len[i] = hv_snprintf(NULL, 0, "0x%X", msg_getHash(m, i)) + 1; break;
+      case HV_MSG_HASH: len[i] = hv_snprintf(NULL, 0, "0x%" PRIX32, msg_getHash(m, i)) + 1; break;
       default: break;
     }
     size += len[i];
@@ -189,7 +189,7 @@ char *msg_toString(const HvMessage *m) {
       case HV_MSG_BANG: hv_snprintf(finalString+pos, len[i], "%s", "bang"); break;
       case HV_MSG_FLOAT: hv_snprintf(finalString+pos, len[i], "%g", msg_getFloat(m, i)); break;
       case HV_MSG_SYMBOL: hv_snprintf(finalString+pos, len[i], "%s", msg_getSymbol(m, i)); break;
-      case HV_MSG_HASH: hv_snprintf(finalString+pos, len[i], "0x%X", msg_getHash(m, i)); break;
+      case HV_MSG_HASH: hv_snprintf(finalString+pos, len[i], "0x%" PRIX32, msg_getHash(m, i)); break;
       default: break;
     }
     pos += len[i];

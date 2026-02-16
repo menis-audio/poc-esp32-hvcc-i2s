@@ -43,6 +43,7 @@
 
 // type definitions
 #include <stdint.h>
+#include <inttypes.h>
 #include <stdbool.h>
 #define hv_uint8_t uint8_t
 #define hv_int16_t int16_t

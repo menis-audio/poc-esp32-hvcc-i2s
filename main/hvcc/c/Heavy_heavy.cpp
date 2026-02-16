@@ -83,7 +83,7 @@ extern "C" {
 
 Heavy_heavy::Heavy_heavy(double sampleRate, int poolKb, int inQueueKb, int outQueueKb)
     : HeavyContext(sampleRate, poolKb, inQueueKb, outQueueKb) {
-  numBytes += sPhasor_k_init(&sPhasor_8RYetA7E, 220.0f, sampleRate);
+  numBytes += sPhasor_k_init(&sPhasor_TVDbuSdw, 220.0f, sampleRate);
   
 }
 
@@ -180,7 +180,7 @@ int Heavy_heavy::process(float **inputBuffers, float **outputBuffers, int n) {
     __hv_zero_f(VOf(O1));
 
     // process all signal functions
-    __hv_phasor_k_f(&sPhasor_8RYetA7E, VOf(Bf0));
+    __hv_phasor_k_f(&sPhasor_TVDbuSdw, VOf(Bf0));
     __hv_var_k_f(VOf(Bf1), 0.1f, 0.1f, 0.1f, 0.1f, 0.1f, 0.1f, 0.1f, 0.1f);
     __hv_mul_f(VIf(Bf0), VIf(Bf1), VOf(Bf1));
     __hv_add_f(VIf(Bf1), VIf(O0), VOf(O0));

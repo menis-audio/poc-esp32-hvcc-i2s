@@ -3,7 +3,7 @@
     "imports": [],
     "args": [],
     "objects": {
-        "dac~_dlkwVpVK": {
+        "dac~_OyhjzeFO": {
             "type": "dac",
             "args": {
                 "channels": [
@@ -16,7 +16,7 @@
                 "y": 691
             }
         },
-        "*~_ihkdfuas": {
+        "*~_4cNGjC4R": {
             "type": "*",
             "args": {
                 "k": 0.1
@@ -26,12 +26,12 @@
                 "y": 650
             }
         },
-        "graph_grbSfGqO": {
+        "graph_G8PR7O64": {
             "type": "graph",
             "imports": [],
             "args": [],
             "objects": {
-                "outlet~_Czoqtn5g": {
+                "outlet~_HnU514UW": {
                     "type": "outlet",
                     "args": {
                         "name": "",
@@ -43,7 +43,7 @@
                         "y": 69
                     }
                 },
-                "inlet_tTup324k": {
+                "inlet_kUYnYJ8x": {
                     "type": "inlet",
                     "args": {
                         "name": "",
@@ -55,7 +55,7 @@
                         "y": 14
                     }
                 },
-                "phasor_KCLcYfmG": {
+                "phasor_8Xm8sToD": {
                     "type": "phasor",
                     "args": {
                         "frequency": 220.0
@@ -66,7 +66,7 @@
                     },
                     "annotations": {}
                 },
-                "comment_5gOgJAr2": {
+                "comment_4lyl3EaR": {
                     "type": "comment",
                     "args": {
                         "text": "@hv_arg \\$1 frequency float 0 false"
@@ -77,7 +77,7 @@
                     },
                     "annotations": {}
                 },
-                "inlet_LOJ21Tdv": {
+                "inlet_cYapb9rC": {
                     "type": "inlet",
                     "args": {
                         "name": "",
@@ -93,33 +93,33 @@
             "connections": [
                 {
                     "from": {
-                        "id": "inlet_tTup324k",
+                        "id": "inlet_kUYnYJ8x",
                         "outlet": 0
                     },
                     "to": {
-                        "id": "phasor_KCLcYfmG",
+                        "id": "phasor_8Xm8sToD",
                         "inlet": 1
                     },
                     "type": "-->"
                 },
                 {
                     "from": {
-                        "id": "phasor_KCLcYfmG",
+                        "id": "phasor_8Xm8sToD",
                         "outlet": 0
                     },
                     "to": {
-                        "id": "outlet~_Czoqtn5g",
+                        "id": "outlet~_HnU514UW",
                         "inlet": 0
                     },
                     "type": "~f>"
                 },
                 {
                     "from": {
-                        "id": "inlet_LOJ21Tdv",
+                        "id": "inlet_cYapb9rC",
                         "outlet": 0
                     },
                     "to": {
-                        "id": "phasor_KCLcYfmG",
+                        "id": "phasor_8Xm8sToD",
                         "inlet": 0
                     },
                     "type": "-~>"
@@ -134,33 +134,33 @@
     "connections": [
         {
             "from": {
-                "id": "*~_ihkdfuas",
+                "id": "*~_4cNGjC4R",
                 "outlet": 0
             },
             "to": {
-                "id": "dac~_dlkwVpVK",
+                "id": "dac~_OyhjzeFO",
                 "inlet": 0
             },
             "type": "~f>"
         },
         {
             "from": {
-                "id": "*~_ihkdfuas",
+                "id": "*~_4cNGjC4R",
                 "outlet": 0
             },
             "to": {
-                "id": "dac~_dlkwVpVK",
+                "id": "dac~_OyhjzeFO",
                 "inlet": 1
             },
             "type": "~f>"
         },
         {
             "from": {
-                "id": "graph_grbSfGqO",
+                "id": "graph_G8PR7O64",
                 "outlet": 0
             },
             "to": {
-                "id": "*~_ihkdfuas",
+                "id": "*~_4cNGjC4R",
                 "inlet": 0
             },
             "type": "~f>"
