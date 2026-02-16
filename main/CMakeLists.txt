@@ -1,5 +1,19 @@
 idf_component_register(
-    SRCS "poc_esp32_hvcc_i2s.c"
-    INCLUDE_DIRS "."
+    SRCS 
+        "poc_esp32_hvcc_i2s.c"
+        "hvcc/c/HvLightPipe.c"
+        "hvcc/c/HvMessage.c"
+        "hvcc/c/HvMessagePool.c"
+        "hvcc/c/HvMessageQueue.c"
+        "hvcc/c/HvSignalPhasor.c"
+        "hvcc/c/HvSignalVar.c"
+        "hvcc/c/HvTable.c"
+        "hvcc/c/HvUtils.c"
+        "hvcc/c/HvHeavy.cpp"
+        "hvcc/c/HeavyContext.cpp"
+        "hvcc/c/Heavy_heavy.cpp"
+    INCLUDE_DIRS 
+        "."
+        "hvcc/c"
     REQUIRES driver
 )

@@ -17,6 +17,9 @@
 // I2S (STD) TX for audio @ 48kHz
 #include "driver/i2s_std.h"
 #include "driver/gpio.h"
+// Heavy (hvcc) generated patch interface
+#include "hvcc/c/Heavy_heavy.h"
+#include "hvcc/c/HvHeavy.h"
 
 void app_main(void)
 {
@@ -27,7 +30,6 @@ void app_main(void)
     const gpio_num_t I2S_DOUT = GPIO_NUM_25;
 
     const uint32_t sample_rate = 48000;   // 48 kHz
-    const float tone_hz = 440.0f;         // 220 Hz tone (A3)
 
     i2s_chan_handle_t tx_handle = NULL;
 
@@ -64,31 +66,39 @@ void app_main(void)
     // Not strictly needed here, we enable and immediately start sending.
     ESP_ERROR_CHECK(i2s_channel_enable(tx_handle));
 
-    // Simple tone generator using a phase accumulator
-    const int frames_per_block = 512; // number of stereo frames per write
+    // Heavy context init
+    HeavyContextInterface *hv_ctx = hv_heavy_new((double) sample_rate);
+    int num_out_channels = hv_getNumOutputChannels(hv_ctx);
+    if (num_out_channels <= 0) {
+        // Fallback to mono if patch has no audio outs
+        num_out_channels = 1;
+    }
+    const int frames_per_block = 256; // must be a multiple of 8 for hv
+    float hv_out[frames_per_block * 2]; // support up to 2 channels (LLLLRRRR)
     int16_t samples[frames_per_block * 2]; // interleaved L/R
-    const int16_t amplitude = 12000; // keep headroom to avoid clipping
-
-    const float two_pi = 6.28318530717958647692f;
-    float phase = 0.0f;
-    const float phase_inc = two_pi * tone_hz / (float)sample_rate;
 
     while (1) {
-        for (int i = 0; i < frames_per_block; ++i) {
-            float s = sinf(phase);
-            int16_t v = (int16_t)(s * amplitude);
-            // Interleave L/R with the same value (mono to both)
-            samples[2 * i]     = v; // Left
-            samples[2 * i + 1] = v; // Right
+        int s = hv_processInline(hv_ctx, NULL, hv_out, frames_per_block);
+        if (s <= 0) {
+            // If nothing processed, yield briefly
+            vTaskDelay(1);
+            continue;
+        }
 
-            phase += phase_inc;
-            if (phase >= two_pi) phase -= two_pi;
+        for (int i = 0; i < s; ++i) {
+            float l = hv_out[i];
+            float r = (num_out_channels >= 2) ? hv_out[i + s] : l;
+            if (l > 1.0f) l = 1.0f; else if (l < -1.0f) l = -1.0f;
+            if (r > 1.0f) r = 1.0f; else if (r < -1.0f) r = -1.0f;
+            int16_t li = (int16_t)(l * 32767.0f);
+            int16_t ri = (int16_t)(r * 32767.0f);
+            samples[2 * i]     = li; // Left
+            samples[2 * i + 1] = ri; // Right
         }
 
         size_t written = 0;
-        esp_err_t err = i2s_channel_write(tx_handle, samples, sizeof(samples), &written, portMAX_DELAY);
+        esp_err_t err = i2s_channel_write(tx_handle, samples, (size_t)(s * 2 * sizeof(int16_t)), &written, portMAX_DELAY);
         if (err != ESP_OK) {
-            // Yield briefly on error to avoid tight loop
             vTaskDelay(1);
         }
     }

@@ -1,0 +1,594 @@
+{
+    "type": "graph",
+    "imports": [],
+    "args": [],
+    "objects": {
+        "dac~_EueQ21Ej": {
+            "type": "dac",
+            "args": {
+                "channels": [
+                    1,
+                    2
+                ]
+            },
+            "properties": {
+                "x": 205,
+                "y": 246
+            }
+        },
+        "*~_sTh1GBLR": {
+            "type": "*",
+            "args": {
+                "k": 0.1
+            },
+            "properties": {
+                "x": 205,
+                "y": 208
+            }
+        },
+        "graph_2tH1nCKf": {
+            "type": "graph",
+            "imports": [],
+            "args": [],
+            "objects": {
+                "*~_MGT01w6y": {
+                    "type": "*",
+                    "args": {
+                        "k": 0.0
+                    },
+                    "properties": {
+                        "x": 33,
+                        "y": 178
+                    }
+                },
+                "*~_7E89gDu2": {
+                    "type": "*",
+                    "args": {
+                        "k": 0.0
+                    },
+                    "properties": {
+                        "x": 44,
+                        "y": 231
+                    }
+                },
+                "*~_vx0s2852": {
+                    "type": "*",
+                    "args": {
+                        "k": 0.0
+                    },
+                    "properties": {
+                        "x": 48,
+                        "y": 154
+                    }
+                },
+                "comment_F6W4Hmnj": {
+                    "type": "comment",
+                    "args": {
+                        "text": "x^2"
+                    },
+                    "properties": {
+                        "x": 74,
+                        "y": 153
+                    },
+                    "annotations": {}
+                },
+                "comment_P70JO8Ur": {
+                    "type": "comment",
+                    "args": {
+                        "text": "x^3"
+                    },
+                    "properties": {
+                        "x": 57,
+                        "y": 178
+                    },
+                    "annotations": {}
+                },
+                "comment_OcWx8QHv": {
+                    "type": "comment",
+                    "args": {
+                        "text": "x^5"
+                    },
+                    "properties": {
+                        "x": 68,
+                        "y": 231
+                    },
+                    "annotations": {}
+                },
+                "+~_7qd5plV4": {
+                    "type": "+",
+                    "args": {
+                        "k": 0.0
+                    },
+                    "properties": {
+                        "x": 18,
+                        "y": 276
+                    }
+                },
+                "outlet~_W3euOxxM": {
+                    "type": "outlet",
+                    "args": {
+                        "name": "",
+                        "index": 0,
+                        "type": "~f>"
+                    },
+                    "properties": {
+                        "x": 18,
+                        "y": 299
+                    }
+                },
+                "comment_kj0dhyIg": {
+                    "type": "comment",
+                    "args": {
+                        "text": "@hv_arg \\$1 frequency float 440 false"
+                    },
+                    "properties": {
+                        "x": 17,
+                        "y": 320
+                    },
+                    "annotations": {}
+                },
+                "comment_60Du8FL6": {
+                    "type": "comment",
+                    "args": {
+                        "text": "x"
+                    },
+                    "properties": {
+                        "x": 85,
+                        "y": 122
+                    },
+                    "annotations": {}
+                },
+                "graph_1GA0bizi": {
+                    "type": "graph",
+                    "imports": [],
+                    "args": [],
+                    "objects": {
+                        "__abs~f_tjQVgBFk": {
+                            "type": "__abs~f",
+                            "args": {},
+                            "properties": {
+                                "x": 13,
+                                "y": 50
+                            },
+                            "annotations": {}
+                        },
+                        "inlet~_VQiGRe59": {
+                            "type": "inlet",
+                            "args": {
+                                "name": "",
+                                "index": 0,
+                                "type": "~f>"
+                            },
+                            "properties": {
+                                "x": 13,
+                                "y": 20
+                            }
+                        },
+                        "outlet~_Dw53ChwF": {
+                            "type": "outlet",
+                            "args": {
+                                "name": "",
+                                "index": 0,
+                                "type": "~f>"
+                            },
+                            "properties": {
+                                "x": 13,
+                                "y": 80
+                            }
+                        }
+                    },
+                    "connections": [
+                        {
+                            "from": {
+                                "id": "__abs~f_tjQVgBFk",
+                                "outlet": 0
+                            },
+                            "to": {
+                                "id": "outlet~_Dw53ChwF",
+                                "inlet": 0
+                            },
+                            "type": "~f>"
+                        },
+                        {
+                            "from": {
+                                "id": "inlet~_VQiGRe59",
+                                "outlet": 0
+                            },
+                            "to": {
+                                "id": "__abs~f_tjQVgBFk",
+                                "inlet": 0
+                            },
+                            "type": "~f>"
+                        }
+                    ],
+                    "properties": {
+                        "x": 18,
+                        "y": 78
+                    }
+                },
+                "-~_M5bH9Lka": {
+                    "type": "-",
+                    "args": {
+                        "k": 0.5
+                    },
+                    "properties": {
+                        "x": 18,
+                        "y": 56
+                    }
+                },
+                "comment_mjeE4RDG": {
+                    "type": "comment",
+                    "args": {
+                        "text": "[-0.25 \\, +0.25]"
+                    },
+                    "properties": {
+                        "x": 67,
+                        "y": 98
+                    },
+                    "annotations": {}
+                },
+                "*~_tVzL19mK": {
+                    "type": "*",
+                    "args": {
+                        "k": 6.283185307179586
+                    },
+                    "properties": {
+                        "x": 18,
+                        "y": 122
+                    }
+                },
+                "-~_6AKRShYz": {
+                    "type": "-",
+                    "args": {
+                        "k": 0.25
+                    },
+                    "properties": {
+                        "x": 18,
+                        "y": 99
+                    }
+                },
+                "inlet_4aytI1M0": {
+                    "type": "inlet",
+                    "args": {
+                        "name": "",
+                        "index": 1,
+                        "type": "-->"
+                    },
+                    "properties": {
+                        "x": 135,
+                        "y": 9
+                    }
+                },
+                "inlet_gD40qARl": {
+                    "type": "inlet",
+                    "args": {
+                        "name": "",
+                        "index": 0,
+                        "type": "-~>"
+                    },
+                    "properties": {
+                        "x": 18,
+                        "y": 9
+                    }
+                },
+                "comment_SCua4zzc": {
+                    "type": "comment",
+                    "args": {
+                        "text": "-5% to adjust for taylor expansion"
+                    },
+                    "properties": {
+                        "x": 44,
+                        "y": 278
+                    },
+                    "annotations": {}
+                },
+                "*~_hin6m9NV": {
+                    "type": "*",
+                    "args": {
+                        "k": 0.007833333333333
+                    },
+                    "properties": {
+                        "x": 44,
+                        "y": 255
+                    }
+                },
+                "comment_XCYLsKEf": {
+                    "type": "comment",
+                    "args": {
+                        "text": "a cosine oscillator"
+                    },
+                    "properties": {
+                        "x": 16,
+                        "y": 335
+                    },
+                    "annotations": {}
+                },
+                "phasor_Kc5oCzGQ": {
+                    "type": "phasor",
+                    "args": {
+                        "frequency": 440.0
+                    },
+                    "properties": {
+                        "x": 18,
+                        "y": 33
+                    },
+                    "annotations": {}
+                },
+                "*~_SOeQqCZx": {
+                    "type": "*",
+                    "args": {
+                        "k": -0.166666666666667
+                    },
+                    "properties": {
+                        "x": 33,
+                        "y": 202
+                    }
+                },
+                "+~_wrfbACMH": {
+                    "type": "+",
+                    "args": {
+                        "k": 0.0
+                    },
+                    "properties": {
+                        "x": 18,
+                        "y": 254
+                    }
+                }
+            },
+            "connections": [
+                {
+                    "from": {
+                        "id": "*~_MGT01w6y",
+                        "outlet": 0
+                    },
+                    "to": {
+                        "id": "*~_7E89gDu2",
+                        "inlet": 0
+                    },
+                    "type": "~f>"
+                },
+                {
+                    "from": {
+                        "id": "*~_MGT01w6y",
+                        "outlet": 0
+                    },
+                    "to": {
+                        "id": "*~_SOeQqCZx",
+                        "inlet": 0
+                    },
+                    "type": "~f>"
+                },
+                {
+                    "from": {
+                        "id": "*~_7E89gDu2",
+                        "outlet": 0
+                    },
+                    "to": {
+                        "id": "*~_hin6m9NV",
+                        "inlet": 0
+                    },
+                    "type": "~f>"
+                },
+                {
+                    "from": {
+                        "id": "*~_vx0s2852",
+                        "outlet": 0
+                    },
+                    "to": {
+                        "id": "*~_7E89gDu2",
+                        "inlet": 1
+                    },
+                    "type": "~f>"
+                },
+                {
+                    "from": {
+                        "id": "*~_vx0s2852",
+                        "outlet": 0
+                    },
+                    "to": {
+                        "id": "*~_MGT01w6y",
+                        "inlet": 1
+                    },
+                    "type": "~f>"
+                },
+                {
+                    "from": {
+                        "id": "+~_7qd5plV4",
+                        "outlet": 0
+                    },
+                    "to": {
+                        "id": "outlet~_W3euOxxM",
+                        "inlet": 0
+                    },
+                    "type": "~f>"
+                },
+                {
+                    "from": {
+                        "id": "graph_1GA0bizi",
+                        "outlet": 0
+                    },
+                    "to": {
+                        "id": "-~_6AKRShYz",
+                        "inlet": 0
+                    },
+                    "type": "~f>"
+                },
+                {
+                    "from": {
+                        "id": "-~_M5bH9Lka",
+                        "outlet": 0
+                    },
+                    "to": {
+                        "id": "graph_1GA0bizi",
+                        "inlet": 0
+                    },
+                    "type": "~f>"
+                },
+                {
+                    "from": {
+                        "id": "*~_tVzL19mK",
+                        "outlet": 0
+                    },
+                    "to": {
+                        "id": "*~_vx0s2852",
+                        "inlet": 0
+                    },
+                    "type": "~f>"
+                },
+                {
+                    "from": {
+                        "id": "*~_tVzL19mK",
+                        "outlet": 0
+                    },
+                    "to": {
+                        "id": "*~_vx0s2852",
+                        "inlet": 1
+                    },
+                    "type": "~f>"
+                },
+                {
+                    "from": {
+                        "id": "*~_tVzL19mK",
+                        "outlet": 0
+                    },
+                    "to": {
+                        "id": "*~_MGT01w6y",
+                        "inlet": 0
+                    },
+                    "type": "~f>"
+                },
+                {
+                    "from": {
+                        "id": "*~_tVzL19mK",
+                        "outlet": 0
+                    },
+                    "to": {
+                        "id": "+~_wrfbACMH",
+                        "inlet": 0
+                    },
+                    "type": "~f>"
+                },
+                {
+                    "from": {
+                        "id": "-~_6AKRShYz",
+                        "outlet": 0
+                    },
+                    "to": {
+                        "id": "*~_tVzL19mK",
+                        "inlet": 0
+                    },
+                    "type": "~f>"
+                },
+                {
+                    "from": {
+                        "id": "inlet_4aytI1M0",
+                        "outlet": 0
+                    },
+                    "to": {
+                        "id": "phasor_Kc5oCzGQ",
+                        "inlet": 1
+                    },
+                    "type": "-->"
+                },
+                {
+                    "from": {
+                        "id": "inlet_gD40qARl",
+                        "outlet": 0
+                    },
+                    "to": {
+                        "id": "phasor_Kc5oCzGQ",
+                        "inlet": 0
+                    },
+                    "type": "-~>"
+                },
+                {
+                    "from": {
+                        "id": "*~_hin6m9NV",
+                        "outlet": 0
+                    },
+                    "to": {
+                        "id": "+~_7qd5plV4",
+                        "inlet": 1
+                    },
+                    "type": "~f>"
+                },
+                {
+                    "from": {
+                        "id": "phasor_Kc5oCzGQ",
+                        "outlet": 0
+                    },
+                    "to": {
+                        "id": "-~_M5bH9Lka",
+                        "inlet": 0
+                    },
+                    "type": "~f>"
+                },
+                {
+                    "from": {
+                        "id": "*~_SOeQqCZx",
+                        "outlet": 0
+                    },
+                    "to": {
+                        "id": "+~_wrfbACMH",
+                        "inlet": 1
+                    },
+                    "type": "~f>"
+                },
+                {
+                    "from": {
+                        "id": "+~_wrfbACMH",
+                        "outlet": 0
+                    },
+                    "to": {
+                        "id": "+~_7qd5plV4",
+                        "inlet": 0
+                    },
+                    "type": "~f>"
+                }
+            ],
+            "properties": {
+                "x": 205,
+                "y": 163
+            }
+        }
+    },
+    "connections": [
+        {
+            "from": {
+                "id": "*~_sTh1GBLR",
+                "outlet": 0
+            },
+            "to": {
+                "id": "dac~_EueQ21Ej",
+                "inlet": 0
+            },
+            "type": "~f>"
+        },
+        {
+            "from": {
+                "id": "*~_sTh1GBLR",
+                "outlet": 0
+            },
+            "to": {
+                "id": "dac~_EueQ21Ej",
+                "inlet": 1
+            },
+            "type": "~f>"
+        },
+        {
+            "from": {
+                "id": "graph_2tH1nCKf",
+                "outlet": 0
+            },
+            "to": {
+                "id": "*~_sTh1GBLR",
+                "inlet": 0
+            },
+            "type": "~f>"
+        }
+    ],
+    "properties": {
+        "x": 0,
+        "y": 0
+    }
+}
