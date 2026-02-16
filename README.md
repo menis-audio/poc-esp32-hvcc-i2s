@@ -25,22 +25,39 @@ Pure Data (test.pd)
 - An ESP32 board connected via serial (e.g., `/dev/ttyUSB0`).
 
 ## Quick Start
+Recommended: use the HVCC external generator to scaffold a standalone ESP-IDF project (no Python execution inside HVCC; `idf.py` is only used by you, externally).
+
 1) Open an ESP-IDF shell (Linux/macOS):
     ```bash
     . "$HOME/esp/esp-idf/export.sh"
     ```
-2) Generate HVCC code, build, and flash via the script:
+2) Generate an ESP-IDF app with the custom generator:
+    ```bash
+    hvcc main/test.pd -G c2espidf -o generated/espidf_app
+    ```
+    This creates a fresh ESP-IDF project in `generated/espidf_app` containing:
+    - HVCC C sources copied under `main/hvcc/c`
+    - An I2S + Heavy wrapper in [generated/espidf_app/main/poc_esp32_hvcc_i2s.c](generated/espidf_app/main/poc_esp32_hvcc_i2s.c)
+    - Minimal CMake files to build with ESP-IDF
+
+3) Build and flash the generated project (outside HVCC):
+    ```bash
+    cd generated/espidf_app
+    idf.py set-target esp32
+    idf.py build
+    idf.py -p /dev/ttyUSB0 flash
+    ```
+
+Note: Building requires an ESP-IDF environment. The external HVCC generator does not execute Python; you run `idf.py` (or another ESP32 build system) yourself, outside HVCC.
+
+One-liner:
+- Use [export.sh](export.sh) to run the generator and build/flash automatically.
     ```bash
     chmod +x export.sh
     ./export.sh
     ```
-    What happens:
-    - Preflight checks for `hvcc` and `idf.py`, sets target `esp32`
-    - Regenerates HVCC sources from [main/test.pd](main/test.pd) into [main/hvcc](main/hvcc)
-    - Builds the firmware with ESP-IDF
-    - Flashes the device (auto or via `ESPPORT`/`PORT` env)
 
-If needed, set the serial port explicitly afterward:
+If needed, set the serial port explicitly:
 ```bash
 export ESPPORT=/dev/ttyUSB0
 ./export.sh
@@ -57,8 +74,17 @@ Update the pins in [main/poc_esp32_hvcc_i2s.c](main/poc_esp32_hvcc_i2s.c) if you
 ## Files of Interest
 - [main/test.pd](main/test.pd): Pure Data patch compiled by HVCC.
 - [main/poc_esp32_hvcc_i2s.c](main/poc_esp32_hvcc_i2s.c): Encapsulated, commented example for I2S + Heavy.
-- [main/CMakeLists.txt](main/CMakeLists.txt): Regenerates HVCC sources at configure time if `hvcc` is available.
-- [export.sh](export.sh): One-liner workflow to regenerate, build, and flash.
+- [main/CMakeLists.txt](main/CMakeLists.txt): Consumes HVCC sources if present under `main/hvcc`; does not regenerate.
+- [export.sh](export.sh): One-liner workflow to generate a standalone ESP-IDF app and build/flash it.
+
+## External Generator
+- Custom HVCC generator module: [c2espidf.py](c2espidf.py)
+- Invoke with: `hvcc main/test.pd -G c2espidf -o generated/espidf_app`
+- Behavior:
+    - Copies HVCC C sources from HVCC compile stage into `main/hvcc/c`
+    - Writes minimal ESP-IDF `CMakeLists.txt` and wrapper [poc_esp32_hvcc_i2s.c](generated/espidf_app/main/poc_esp32_hvcc_i2s.c)
+    - Applies safe printf fixes in `HvMessage.c` and adds `<inttypes.h>` to `HvUtils.h`
+- Deliberately does not call `idf.py`: building and flashing happen outside HVCC, so the generator works within pyinstaller-packed environments.
 
 ## Notes & Limitations
 - Output-only PoC: ensure your PD patch sends audio to outlets (e.g., `dac~`).

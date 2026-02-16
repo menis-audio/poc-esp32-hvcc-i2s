@@ -1,9 +1,8 @@
 cmake_minimum_required(VERSION 3.16)
 
-# Consume pre-generated HVCC sources placed under main/hvcc by an external generator.
+# Consume HVCC sources placed under main/hvcc by the generator
 set(HVCC_OUT_DIR "${CMAKE_CURRENT_SOURCE_DIR}/hvcc")
 
-# Collect generated HVCC sources dynamically to avoid missing files when hvcc output changes
 file(GLOB HVCC_SOURCES
     "${HVCC_OUT_DIR}/c/*.c"
     "${HVCC_OUT_DIR}/c/*.cpp"
