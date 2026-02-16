@@ -16,15 +16,15 @@ Focus is output-only: the PD patch produces audio; there is no input or control 
     ```bash
     . "$HOME/esp/esp-idf/export.sh"
     ```
-2) Run the project script:
+2) Generate HVCC code, build, and flash via the script:
     ```bash
     chmod +x export.sh
     ./export.sh
     ```
-    The script will:
-    - Remove any previous `main/hvcc` output
-    - Compile `main/test.pd` with HVCC into `main/hvcc`
-    - Build the firmware and flash it to the connected ESP32
+    What happens:
+    - Regenerates HVCC sources from [main/test.pd](main/test.pd) into [main/hvcc](main/hvcc)
+    - Builds the firmware with ESP-IDF
+    - Flashes the device (set the port if needed)
 
 If needed, set the serial port explicitly afterward:
 ```bash
@@ -41,11 +41,15 @@ Update the pins in [main/poc_esp32_hvcc_i2s.c](main/poc_esp32_hvcc_i2s.c) if you
 
 ## Files of Interest
 - [main/test.pd](main/test.pd): Pure Data patch compiled by HVCC.
-- [main/poc_esp32_hvcc_i2s.c](main/poc_esp32_hvcc_i2s.c): I2S setup and streaming from the Heavy context.
-- [export.sh](export.sh): Convenience script to regenerate HVCC output, build, and flash.
+- [main/poc_esp32_hvcc_i2s.c](main/poc_esp32_hvcc_i2s.c): Encapsulated, commented example for I2S + Heavy.
+- [main/CMakeLists.txt](main/CMakeLists.txt): Regenerates HVCC sources at configure time if `hvcc` is available.
+- [export.sh](export.sh): One-liner workflow to regenerate, build, and flash.
 
 ## Notes & Limitations
-- Output-only PoC: ensure your PD patch generates audio to standard outlets.
-- Sample rate is set to 48 kHz in the C file; adjust if required.
-- Uses the ESP-IDF standard I2S driver (`i2s_std`).
+- Output-only PoC: ensure your PD patch sends audio to outlets (e.g., `dac~`).
+- Default sample rate: 48 kHz. Change in [main/poc_esp32_hvcc_i2s.c](main/poc_esp32_hvcc_i2s.c).
+- Uses ESP-IDF standard I2S driver (`i2s_std`). Tested with stereo.
+
+## Keep the Repo Clean
+This project includes a `.gitignore` that excludes build outputs and HVCC-generated sources, keeping only the pedagogical essentials. Regenerate as needed with [export.sh](export.sh).
 

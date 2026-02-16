@@ -1,3 +1,24 @@
+# Build artifacts
+/build/
+/.cmake/
+/.cache/
+
+# HVCC generated code
+/main/hvcc/
+
+# IDE/editor
+.vscode/
+.idea/
+
+# Logs and temporary files
+*.log
+*.tmp
+*.swp
+*.swo
+
+# Python cache
+__pycache__/
+*.pyc
 # ESP-IDF
 build/
 sdkconfig.old
