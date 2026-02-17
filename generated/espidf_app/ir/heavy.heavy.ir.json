@@ -5,102 +5,52 @@
         "display": "heavy"
     },
     "objects": {
-        "GvJTt9Ex": {
+        "lslpgGG9": {
             "args": {},
-            "type": "__abs~f"
+            "type": "__line~f"
         },
-        "Mai7gAjj": {
+        "3KKfB4jm": {
             "args": {},
-            "type": "__mul~f"
+            "type": "__cast_b"
         },
-        "pNUfFk6Z": {
-            "args": {},
-            "type": "__mul~f"
-        },
-        "9eXrhrBm": {
-            "args": {},
-            "type": "__mul~f"
-        },
-        "pA8J1DjD": {
+        "JKykRIXu": {
             "args": {
-                "k": 0.5,
-                "step": 0,
-                "reverse": 0.0
+                "label": "button1"
             },
-            "type": "__var_k~f"
+            "type": "__print"
         },
-        "bs9A8gyC": {
-            "args": {},
-            "type": "__sub~f"
-        },
-        "m06LLO0N": {
-            "args": {},
-            "type": "__mul~f"
-        },
-        "qKBAsWkO": {
+        "JJxGO5uD": {
             "args": {
-                "k": 6.283185307179586,
-                "step": 0,
-                "reverse": 0.0
+                "k": 1.0
             },
-            "type": "__var_k~f"
+            "type": "__var"
         },
-        "GuKWli3W": {
+        "7kLdQtQj": {
             "args": {
-                "k": 0.25,
-                "step": 0,
-                "reverse": 0.0
+                "k": 0.0
             },
-            "type": "__var_k~f"
+            "type": "__eq_k"
         },
-        "pG1S53BI": {
-            "args": {},
-            "type": "__sub~f"
-        },
-        "yo1qYkRR": {
-            "args": {
-                "k": 0.007833333333333,
-                "step": 0,
-                "reverse": 0.0
-            },
-            "type": "__var_k~f"
-        },
-        "TqvHQh5E": {
+        "Kx9NGmH8": {
             "args": {
                 "frequency": 440.0,
                 "phase": 0
             },
             "type": "__phasor~f"
         },
-        "5SlcAt4E": {
-            "args": {
-                "k": -0.166666666666667,
-                "step": 0,
-                "reverse": 0.0
-            },
-            "type": "__var_k~f"
-        },
-        "U0AXMs2E": {
-            "args": {},
-            "type": "__fma~f"
-        },
-        "t5fyb4Rs": {
-            "args": {},
-            "type": "__fma~f"
-        },
-        "MNXT428U": {
-            "args": {},
-            "type": "__line~f"
-        },
-        "JBshe8fc": {
+        "cjSbf4yX": {
             "args": {},
             "type": "__add~f"
         },
-        "QLPxkn3o": {
+        "uunzHDFo": {
             "args": {},
             "type": "__add~f"
         },
-        "h4HRd9bV": {
+        "RbNNxyE3": {
+            "args": {},
+            "type": "__mul~f"
+        },
+        "qeU5eKgb": {
             "args": {
                 "k": 0.1,
                 "step": 0,
@@ -108,17 +58,13 @@
             },
             "type": "__var_k~f"
         },
-        "Y0Y2rasY": {
-            "args": {},
-            "type": "__mul~f"
-        },
-        "vxVACY4l": {
+        "hFXSBwLf": {
             "args": {
                 "k": 1000.0
             },
             "type": "__mul_k"
         },
-        "mLQvgu9P": {
+        "dPhd7lA9": {
             "args": {
                 "local": [
                     [
@@ -130,7 +76,26 @@
             },
             "type": "__message"
         },
-        "RmYQuWRN": {
+        "rDHLovTE": {
+            "args": {},
+            "type": "__mul~f"
+        },
+        "6JXJ63UI": {
+            "args": {
+                "var_id": "9Yw9VJv7"
+            },
+            "type": "__varread~f"
+        },
+        "9Yw9VJv7": {
+            "args": {
+                "k": 0.0,
+                "step": 0.0,
+                "reverse": 0.0,
+                "name": null
+            },
+            "type": "__var~f"
+        },
+        "k2c9h0Zw": {
             "args": {
                 "name": "knob1",
                 "extern": "param",
@@ -142,13 +107,24 @@
                 }
             },
             "type": "__receive"
+        },
+        "9XVin2Wu": {
+            "args": {
+                "name": "button1",
+                "extern": null,
+                "attributes": {}
+            },
+            "type": "__receive"
         }
     },
     "init": {
         "order": [
-            "MNXT428U",
-            "TqvHQh5E",
-            "vxVACY4l"
+            "lslpgGG9",
+            "Kx9NGmH8",
+            "JJxGO5uD",
+            "7kLdQtQj",
+            "hFXSBwLf",
+            "9Yw9VJv7"
         ]
     },
     "tables": {},
@@ -165,17 +141,26 @@
                     "type": "float"
                 },
                 "ids": [
-                    "RmYQuWRN"
+                    "k2c9h0Zw"
+                ]
+            },
+            "button1": {
+                "display": "button1",
+                "hash": "0xFB2DC5B6",
+                "extern": null,
+                "attributes": {},
+                "ids": [
+                    "9XVin2Wu"
                 ]
             }
         },
         "sendMessage": [
             {
-                "id": "vxVACY4l",
+                "id": "3KKfB4jm",
                 "onMessage": [
                     [
                         {
-                            "id": "mLQvgu9P",
+                            "id": "JJxGO5uD",
                             "inletIndex": 0
                         }
                     ]
@@ -188,11 +173,15 @@
                 "name": ""
             },
             {
-                "id": "mLQvgu9P",
+                "id": "JJxGO5uD",
                 "onMessage": [
                     [
                         {
-                            "id": "MNXT428U",
+                            "id": "7kLdQtQj",
+                            "inletIndex": 0
+                        },
+                        {
+                            "id": "9Yw9VJv7",
                             "inletIndex": 0
                         }
                     ]
@@ -205,11 +194,83 @@
                 "name": ""
             },
             {
-                "id": "RmYQuWRN",
+                "id": "7kLdQtQj",
                 "onMessage": [
                     [
                         {
-                            "id": "vxVACY4l",
+                            "id": "JJxGO5uD",
+                            "inletIndex": 1
+                        }
+                    ]
+                ],
+                "type": null,
+                "extern": "",
+                "attributes": null,
+                "hash": null,
+                "display": null,
+                "name": ""
+            },
+            {
+                "id": "hFXSBwLf",
+                "onMessage": [
+                    [
+                        {
+                            "id": "dPhd7lA9",
+                            "inletIndex": 0
+                        }
+                    ]
+                ],
+                "type": null,
+                "extern": "",
+                "attributes": null,
+                "hash": null,
+                "display": null,
+                "name": ""
+            },
+            {
+                "id": "dPhd7lA9",
+                "onMessage": [
+                    [
+                        {
+                            "id": "lslpgGG9",
+                            "inletIndex": 0
+                        }
+                    ]
+                ],
+                "type": null,
+                "extern": "",
+                "attributes": null,
+                "hash": null,
+                "display": null,
+                "name": ""
+            },
+            {
+                "id": "k2c9h0Zw",
+                "onMessage": [
+                    [
+                        {
+                            "id": "hFXSBwLf",
+                            "inletIndex": 0
+                        }
+                    ]
+                ],
+                "type": null,
+                "extern": "",
+                "attributes": null,
+                "hash": null,
+                "display": null,
+                "name": ""
+            },
+            {
+                "id": "9XVin2Wu",
+                "onMessage": [
+                    [
+                        {
+                            "id": "3KKfB4jm",
+                            "inletIndex": 0
+                        },
+                        {
+                            "id": "JKykRIXu",
                             "inletIndex": 0
                         }
                     ]
@@ -227,12 +288,12 @@
         "numInputBuffers": 0,
         "numOutputBuffers": 2,
         "numTemporaryBuffers": {
-            "float": 5,
+            "float": 2,
             "integer": 0
         },
         "processOrder": [
             {
-                "id": "MNXT428U",
+                "id": "lslpgGG9",
                 "inputBuffers": [],
                 "outputBuffers": [
                     {
@@ -242,7 +303,7 @@
                 ]
             },
             {
-                "id": "TqvHQh5E",
+                "id": "Kx9NGmH8",
                 "inputBuffers": [
                     {
                         "type": "~f>",
@@ -257,7 +318,7 @@
                 ]
             },
             {
-                "id": "pA8J1DjD",
+                "id": "6JXJ63UI",
                 "inputBuffers": [],
                 "outputBuffers": [
                     {
@@ -267,7 +328,7 @@
                 ]
             },
             {
-                "id": "bs9A8gyC",
+                "id": "rDHLovTE",
                 "inputBuffers": [
                     {
                         "type": "~f>",
@@ -286,22 +347,7 @@
                 ]
             },
             {
-                "id": "GvJTt9Ex",
-                "inputBuffers": [
-                    {
-                        "type": "~f>",
-                        "index": 1
-                    }
-                ],
-                "outputBuffers": [
-                    {
-                        "type": "~f>",
-                        "index": 1
-                    }
-                ]
-            },
-            {
-                "id": "GuKWli3W",
+                "id": "qeU5eKgb",
                 "inputBuffers": [],
                 "outputBuffers": [
                     {
@@ -311,7 +357,7 @@
                 ]
             },
             {
-                "id": "pG1S53BI",
+                "id": "RbNNxyE3",
                 "inputBuffers": [
                     {
                         "type": "~f>",
@@ -330,192 +376,11 @@
                 ]
             },
             {
-                "id": "qKBAsWkO",
-                "inputBuffers": [],
-                "outputBuffers": [
-                    {
-                        "type": "~f>",
-                        "index": 1
-                    }
-                ]
-            },
-            {
-                "id": "m06LLO0N",
+                "id": "cjSbf4yX",
                 "inputBuffers": [
                     {
                         "type": "~f>",
                         "index": 0
-                    },
-                    {
-                        "type": "~f>",
-                        "index": 1
-                    }
-                ],
-                "outputBuffers": [
-                    {
-                        "type": "~f>",
-                        "index": 1
-                    }
-                ]
-            },
-            {
-                "id": "9eXrhrBm",
-                "inputBuffers": [
-                    {
-                        "type": "~f>",
-                        "index": 1
-                    },
-                    {
-                        "type": "~f>",
-                        "index": 1
-                    }
-                ],
-                "outputBuffers": [
-                    {
-                        "type": "~f>",
-                        "index": 0
-                    }
-                ]
-            },
-            {
-                "id": "Mai7gAjj",
-                "inputBuffers": [
-                    {
-                        "type": "~f>",
-                        "index": 1
-                    },
-                    {
-                        "type": "~f>",
-                        "index": 0
-                    }
-                ],
-                "outputBuffers": [
-                    {
-                        "type": "~f>",
-                        "index": 2
-                    }
-                ]
-            },
-            {
-                "id": "pNUfFk6Z",
-                "inputBuffers": [
-                    {
-                        "type": "~f>",
-                        "index": 2
-                    },
-                    {
-                        "type": "~f>",
-                        "index": 0
-                    }
-                ],
-                "outputBuffers": [
-                    {
-                        "type": "~f>",
-                        "index": 0
-                    }
-                ]
-            },
-            {
-                "id": "yo1qYkRR",
-                "inputBuffers": [],
-                "outputBuffers": [
-                    {
-                        "type": "~f>",
-                        "index": 3
-                    }
-                ]
-            },
-            {
-                "id": "5SlcAt4E",
-                "inputBuffers": [],
-                "outputBuffers": [
-                    {
-                        "type": "~f>",
-                        "index": 4
-                    }
-                ]
-            },
-            {
-                "id": "t5fyb4Rs",
-                "inputBuffers": [
-                    {
-                        "type": "~f>",
-                        "index": 2
-                    },
-                    {
-                        "type": "~f>",
-                        "index": 4
-                    },
-                    {
-                        "type": "~f>",
-                        "index": 1
-                    }
-                ],
-                "outputBuffers": [
-                    {
-                        "type": "~f>",
-                        "index": 1
-                    }
-                ]
-            },
-            {
-                "id": "U0AXMs2E",
-                "inputBuffers": [
-                    {
-                        "type": "~f>",
-                        "index": 0
-                    },
-                    {
-                        "type": "~f>",
-                        "index": 3
-                    },
-                    {
-                        "type": "~f>",
-                        "index": 1
-                    }
-                ],
-                "outputBuffers": [
-                    {
-                        "type": "~f>",
-                        "index": 1
-                    }
-                ]
-            },
-            {
-                "id": "h4HRd9bV",
-                "inputBuffers": [],
-                "outputBuffers": [
-                    {
-                        "type": "~f>",
-                        "index": 3
-                    }
-                ]
-            },
-            {
-                "id": "Y0Y2rasY",
-                "inputBuffers": [
-                    {
-                        "type": "~f>",
-                        "index": 1
-                    },
-                    {
-                        "type": "~f>",
-                        "index": 3
-                    }
-                ],
-                "outputBuffers": [
-                    {
-                        "type": "~f>",
-                        "index": 3
-                    }
-                ]
-            },
-            {
-                "id": "JBshe8fc",
-                "inputBuffers": [
-                    {
-                        "type": "~f>",
-                        "index": 3
                     },
                     {
                         "type": "output",
@@ -530,11 +395,11 @@
                 ]
             },
             {
-                "id": "QLPxkn3o",
+                "id": "uunzHDFo",
                 "inputBuffers": [
                     {
                         "type": "~f>",
-                        "index": 3
+                        "index": 0
                     },
                     {
                         "type": "output",

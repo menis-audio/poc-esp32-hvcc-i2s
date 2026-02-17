@@ -106,20 +106,29 @@ typedef struct {
 static void controls_task(void *arg) {
     ControlCtx *ctx = (ControlCtx *) arg;
     const TickType_t delay = pdMS_TO_TICKS(10);
+    // Read ADC a little slower than buttons (every 20ms)
+    const int adc_poll_div = 2; // 2 * 10ms = ~20ms
+    int adc_counter = 0;
     while (1) {
         for (int i = 0; i < ctx->btn_count; ++i) {
             int lvl = gpio_get_level(ctx->btn_map[i].pin);
             if (ctx->btn_map[i].invert) lvl = !lvl;
             if (lvl != ctx->btn_map[i].last_level) {
                 ctx->btn_map[i].last_level = lvl;
-                hv_sendFloatToReceiver(ctx->hv, ctx->btn_map[i].hash, (float) lvl);
+                // Send a PD-style bang on button press (lvl == 1)
+                if (lvl == 1) {
+                    hv_sendBangToReceiver(ctx->hv, ctx->btn_map[i].hash);
+                }
             }
         }
-        for (int i = 0; i < ctx->adc_count; ++i) {
-            int raw = 0;
-            if (adc_oneshot_read(ctx->adc, ctx->adc_map[i].ch, &raw) == ESP_OK) {
-                float v = (float) raw / 4095.0f;
-                hv_sendFloatToReceiver(ctx->hv, ctx->adc_map[i].hash, v);
+        adc_counter++;
+        if ((adc_counter % adc_poll_div) == 0) {
+            for (int i = 0; i < ctx->adc_count; ++i) {
+                int raw = 0;
+                if (adc_oneshot_read(ctx->adc, ctx->adc_map[i].ch, &raw) == ESP_OK) {
+                    float v = (float) raw / 4095.0f;
+                    hv_sendFloatToReceiver(ctx->hv, ctx->adc_map[i].hash, v);
+                }
             }
         }
         vTaskDelay(delay);
@@ -139,7 +148,7 @@ void app_main(void)
     HeavyContextInterface *hv_ctx = init_heavy(sample_rate, &num_out_channels);
 
     // Map hardware controls to PD receivers (like pd2dsy-style mapping).
-    // Buttons: GPIO32 as input with pull-up, send 0/1 float to PD receiver.
+    // Buttons: GPIO32 as input with pull-up, send bang on press to PD receiver.
     static ButtonMap buttons[] = {
         { GPIO_NUM_32, "button1", 1, 0, -1 },
     };

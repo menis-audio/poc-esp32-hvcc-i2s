@@ -35,11 +35,14 @@
 
 // object includes
 #include "HeavyContext.hpp"
-#include "HvSignalVar.h"
 #include "HvSignalLine.h"
+#include "HvControlCast.h"
 #include "HvSignalPhasor.h"
-#include "HvMath.h"
+#include "HvSignalVar.h"
 #include "HvControlBinop.h"
+#include "HvControlPrint.h"
+#include "HvControlVar.h"
+#include "HvMath.h"
 
 class Heavy_heavy : public HeavyContext {
 
@@ -80,14 +83,21 @@ class Heavy_heavy : public HeavyContext {
 
 
   // static sendMessage functions
-  static void cBinop_vxVACY4l_sendMessage(HeavyContextInterface *, int, const HvMessage *);
-  static void cMsg_mLQvgu9P_sendMessage(HeavyContextInterface *, int, const HvMessage *);
-  static void cReceive_RmYQuWRN_sendMessage(HeavyContextInterface *, int, const HvMessage *);
+  static void cCast_3KKfB4jm_sendMessage(HeavyContextInterface *, int, const HvMessage *);
+  static void cVar_JJxGO5uD_sendMessage(HeavyContextInterface *, int, const HvMessage *);
+  static void cBinop_7kLdQtQj_sendMessage(HeavyContextInterface *, int, const HvMessage *);
+  static void cBinop_hFXSBwLf_sendMessage(HeavyContextInterface *, int, const HvMessage *);
+  static void cMsg_dPhd7lA9_sendMessage(HeavyContextInterface *, int, const HvMessage *);
+  static void cReceive_k2c9h0Zw_sendMessage(HeavyContextInterface *, int, const HvMessage *);
+  static void cReceive_9XVin2Wu_sendMessage(HeavyContextInterface *, int, const HvMessage *);
 
   // objects
-  SignalLine sLine_MNXT428U;
-  SignalPhasor sPhasor_TqvHQh5E;
-  ControlBinop cBinop_vxVACY4l;
+  SignalLine sLine_lslpgGG9;
+  SignalPhasor sPhasor_Kx9NGmH8;
+  ControlVar cVar_JJxGO5uD;
+  ControlBinop cBinop_7kLdQtQj;
+  ControlBinop cBinop_hFXSBwLf;
+  SignalVarf sVarf_9Yw9VJv7;
 };
 
 #endif // _HEAVY_CONTEXT_HEAVY_HPP_

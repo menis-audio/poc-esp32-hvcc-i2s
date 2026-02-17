@@ -72,6 +72,7 @@ typedef struct {
     int invert;
     hv_uint32_t hash;
     int last_level;
+    TickType_t last_bang_tick;
 } ButtonMap;
 
 typedef struct {
@@ -92,13 +93,20 @@ typedef struct {
 static void controls_task(void *arg) {
     ControlCtx *ctx = (ControlCtx *) arg;
     const TickType_t delay = pdMS_TO_TICKS(10);
+    const TickType_t debounce_ticks = pdMS_TO_TICKS(30);
     while (1) {
         for (int i = 0; i < ctx->btn_count; ++i) {
             int lvl = gpio_get_level(ctx->btn_map[i].pin);
             if (ctx->btn_map[i].invert) lvl = !lvl;
             if (lvl != ctx->btn_map[i].last_level) {
                 ctx->btn_map[i].last_level = lvl;
-                hv_sendFloatToReceiver(ctx->hv, ctx->btn_map[i].hash, (float) lvl);
+                if (lvl == 1) {
+                    TickType_t now = xTaskGetTickCount();
+                    if (now - ctx->btn_map[i].last_bang_tick >= debounce_ticks) {
+                        ctx->btn_map[i].last_bang_tick = now;
+                        hv_sendBangToReceiver(ctx->hv, ctx->btn_map[i].hash);
+                    }
+                }
             }
         }
         for (int i = 0; i < ctx->adc_count; ++i) {
@@ -124,7 +132,7 @@ void app_main(void)
     HeavyContextInterface *hv_ctx = init_heavy(sample_rate, &num_out_channels);
     // Buttons
     static ButtonMap buttons[] = {
-        { GPIO_NUM_32, "button1", 1, 0, -1 },
+        { GPIO_NUM_32, "button1", 1, 0, -1, 0 },
     };
     for (int i = 0; i < (int)(sizeof(buttons)/sizeof(buttons[0])); ++i) {
         buttons[i].hash = hv_stringToHash(buttons[i].recv);
@@ -137,6 +145,7 @@ void app_main(void)
         };
         gpio_config(&io);
         buttons[i].last_level = -1;
+        buttons[i].last_bang_tick = 0;
     }
 
     // ADC knob on GPIO33 (ADC1 channel 5)
