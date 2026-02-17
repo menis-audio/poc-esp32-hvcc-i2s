@@ -17,11 +17,12 @@
 // I2S (STD) TX for audio @ 48kHz
 #include "driver/i2s_std.h"
 #include "driver/gpio.h"
+#include "esp_adc/adc_oneshot.h"
 // Heavy (hvcc) generated patch interface
 #include "hvcc/c/Heavy_heavy.h"
 #include "hvcc/c/HvHeavy.h"
 
-// Pedagogical helper: configure I2S TX for 48kHz stereo on specific pins.
+//  configure I2S TX for 48kHz stereo on specific pins.
 static i2s_chan_handle_t init_i2s_tx(uint32_t sample_rate, gpio_num_t ws, gpio_num_t bclk, gpio_num_t dout) {
     i2s_chan_handle_t tx_handle = NULL;
     i2s_chan_config_t chan_cfg = I2S_CHANNEL_DEFAULT_CONFIG(I2S_NUM_AUTO, I2S_ROLE_MASTER);
@@ -47,7 +48,7 @@ static i2s_chan_handle_t init_i2s_tx(uint32_t sample_rate, gpio_num_t ws, gpio_n
     return tx_handle;
 }
 
-// Pedagogical helper: create a Heavy (HVCC) audio context for the given sample rate.
+//  create a Heavy (HVCC) audio context for the given sample rate.
 static HeavyContextInterface* init_heavy(uint32_t sample_rate, int *out_channels) {
     HeavyContextInterface *hv_ctx = hv_heavy_new((double) sample_rate);
     int ch = hv_getNumOutputChannels(hv_ctx);
@@ -56,7 +57,7 @@ static HeavyContextInterface* init_heavy(uint32_t sample_rate, int *out_channels
     return hv_ctx;
 }
 
-// Pedagogical helper: process audio in blocks and send to I2S.
+//  process audio in blocks and send to I2S.
 static void run_audio_loop(i2s_chan_handle_t tx, HeavyContextInterface *hv_ctx, int num_out_channels) {
     const int frames_per_block = 256; // HVCC likes multiples of 8
     float hv_out[frames_per_block * 2];
@@ -79,6 +80,52 @@ static void run_audio_loop(i2s_chan_handle_t tx, HeavyContextInterface *hv_ctx, 
     }
 }
 
+typedef struct {
+    gpio_num_t pin;
+    const char *recv;
+    int invert;
+    hv_uint32_t hash;
+    int last_level;
+} ButtonMap;
+
+typedef struct {
+    adc_channel_t ch;
+    const char *recv;
+    hv_uint32_t hash;
+} AdcMap;
+
+typedef struct {
+    HeavyContextInterface *hv;
+    adc_oneshot_unit_handle_t adc;
+    AdcMap *adc_map;
+    int adc_count;
+    ButtonMap *btn_map;
+    int btn_count;
+} ControlCtx;
+
+static void controls_task(void *arg) {
+    ControlCtx *ctx = (ControlCtx *) arg;
+    const TickType_t delay = pdMS_TO_TICKS(10);
+    while (1) {
+        for (int i = 0; i < ctx->btn_count; ++i) {
+            int lvl = gpio_get_level(ctx->btn_map[i].pin);
+            if (ctx->btn_map[i].invert) lvl = !lvl;
+            if (lvl != ctx->btn_map[i].last_level) {
+                ctx->btn_map[i].last_level = lvl;
+                hv_sendFloatToReceiver(ctx->hv, ctx->btn_map[i].hash, (float) lvl);
+            }
+        }
+        for (int i = 0; i < ctx->adc_count; ++i) {
+            int raw = 0;
+            if (adc_oneshot_read(ctx->adc, ctx->adc_map[i].ch, &raw) == ESP_OK) {
+                float v = (float) raw / 4095.0f;
+                hv_sendFloatToReceiver(ctx->hv, ctx->adc_map[i].hash, v);
+            }
+        }
+        vTaskDelay(delay);
+    }
+}
+
 void app_main(void)
 {
     // Pin mapping (ESP32 -> DAC). Adjust for your board.
@@ -90,5 +137,55 @@ void app_main(void)
     i2s_chan_handle_t tx = init_i2s_tx(sample_rate, I2S_WS, I2S_BCLK, I2S_DOUT);
     int num_out_channels = 0;
     HeavyContextInterface *hv_ctx = init_heavy(sample_rate, &num_out_channels);
+
+    // Map hardware controls to PD receivers (like pd2dsy-style mapping).
+    // Buttons: GPIO32 as input with pull-up, send 0/1 float to PD receiver.
+    static ButtonMap buttons[] = {
+        { GPIO_NUM_32, "button1", 1, 0, -1 },
+    };
+    for (int i = 0; i < (int)(sizeof(buttons)/sizeof(buttons[0])); ++i) {
+        buttons[i].hash = hv_stringToHash(buttons[i].recv);
+        gpio_config_t io = {
+            .pin_bit_mask = (1ULL << buttons[i].pin),
+            .mode = GPIO_MODE_INPUT,
+            .pull_up_en = 1,
+            .pull_down_en = 0,
+            .intr_type = GPIO_INTR_DISABLE,
+        };
+        gpio_config(&io);
+        buttons[i].last_level = -1;
+    }
+
+    // ADC (knobs): ADC1_CH5 (GPIO33) sends 0..1 float to PD receiver.
+    static AdcMap knobs[] = {
+        { ADC_CHANNEL_5, "knob1", 0 },
+    };
+    for (int i = 0; i < (int)(sizeof(knobs)/sizeof(knobs[0])); ++i) {
+        knobs[i].hash = hv_stringToHash(knobs[i].recv);
+    }
+
+    adc_oneshot_unit_handle_t adc_unit;
+    adc_oneshot_unit_init_cfg_t unit_cfg = {
+        .unit_id = ADC_UNIT_1,
+    };
+    ESP_ERROR_CHECK(adc_oneshot_new_unit(&unit_cfg, &adc_unit));
+    for (int i = 0; i < (int)(sizeof(knobs)/sizeof(knobs[0])); ++i) {
+        adc_oneshot_chan_cfg_t chan_cfg = {
+            .bitwidth = ADC_BITWIDTH_DEFAULT,
+            .atten = ADC_ATTEN_DB_11,
+        };
+        ESP_ERROR_CHECK(adc_oneshot_config_channel(adc_unit, knobs[i].ch, &chan_cfg));
+    }
+
+    ControlCtx cctx = {
+        .hv = hv_ctx,
+        .adc = adc_unit,
+        .adc_map = knobs,
+        .adc_count = (int)(sizeof(knobs)/sizeof(knobs[0])),
+        .btn_map = buttons,
+        .btn_count = (int)(sizeof(buttons)/sizeof(buttons[0])),
+    };
+    xTaskCreate(controls_task, "controls", 4096, &cctx, 5, NULL);
+
     run_audio_loop(tx, hv_ctx, num_out_channels);
 }

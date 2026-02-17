@@ -7,6 +7,7 @@
 #include "esp_log.h"
 #include "driver/i2s_std.h"
 #include "driver/gpio.h"
+#include "esp_adc/adc_oneshot.h"
 #include "hvcc/c/Heavy_heavy.h"
 #include "hvcc/c/HvHeavy.h"
 
@@ -65,6 +66,52 @@ static void run_audio_loop(i2s_chan_handle_t tx, HeavyContextInterface *hv_ctx, 
     }
 }
 
+typedef struct {
+    gpio_num_t pin;
+    const char *recv;
+    int invert;
+    hv_uint32_t hash;
+    int last_level;
+} ButtonMap;
+
+typedef struct {
+    adc_channel_t ch;
+    const char *recv;
+    hv_uint32_t hash;
+} AdcMap;
+
+typedef struct {
+    HeavyContextInterface *hv;
+    adc_oneshot_unit_handle_t adc;
+    AdcMap *adc_map;
+    int adc_count;
+    ButtonMap *btn_map;
+    int btn_count;
+} ControlCtx;
+
+static void controls_task(void *arg) {
+    ControlCtx *ctx = (ControlCtx *) arg;
+    const TickType_t delay = pdMS_TO_TICKS(10);
+    while (1) {
+        for (int i = 0; i < ctx->btn_count; ++i) {
+            int lvl = gpio_get_level(ctx->btn_map[i].pin);
+            if (ctx->btn_map[i].invert) lvl = !lvl;
+            if (lvl != ctx->btn_map[i].last_level) {
+                ctx->btn_map[i].last_level = lvl;
+                hv_sendFloatToReceiver(ctx->hv, ctx->btn_map[i].hash, (float) lvl);
+            }
+        }
+        for (int i = 0; i < ctx->adc_count; ++i) {
+            int raw = 0;
+            if (adc_oneshot_read(ctx->adc, ctx->adc_map[i].ch, &raw) == ESP_OK) {
+                float v = (float) raw / 4095.0f;
+                hv_sendFloatToReceiver(ctx->hv, ctx->adc_map[i].hash, v);
+            }
+        }
+        vTaskDelay(delay);
+    }
+}
+
 void app_main(void)
 {
     const gpio_num_t I2S_WS   = (gpio_num_t)26;
@@ -75,5 +122,48 @@ void app_main(void)
     i2s_chan_handle_t tx = init_i2s_tx(sample_rate, I2S_WS, I2S_BCLK, I2S_DOUT);
     int num_out_channels = 0;
     HeavyContextInterface *hv_ctx = init_heavy(sample_rate, &num_out_channels);
+    // Buttons
+    static ButtonMap buttons[] = {
+        { GPIO_NUM_32, "button1", 1, 0, -1 },
+    };
+    for (int i = 0; i < (int)(sizeof(buttons)/sizeof(buttons[0])); ++i) {
+        buttons[i].hash = hv_stringToHash(buttons[i].recv);
+        gpio_config_t io = {
+            .pin_bit_mask = (1ULL << buttons[i].pin),
+            .mode = GPIO_MODE_INPUT,
+            .pull_up_en = 1,
+            .pull_down_en = 0,
+            .intr_type = GPIO_INTR_DISABLE,
+        };
+        gpio_config(&io);
+        buttons[i].last_level = -1;
+    }
+
+    // ADC knob on GPIO33 (ADC1 channel 5)
+    static AdcMap knobs[] = {
+        { ADC_CHANNEL_5, "knob1", 0 },
+    };
+    for (int i = 0; i < (int)(sizeof(knobs)/sizeof(knobs[0])); ++i) {
+        knobs[i].hash = hv_stringToHash(knobs[i].recv);
+    }
+
+    adc_oneshot_unit_handle_t adc_unit;
+    adc_oneshot_unit_init_cfg_t unit_cfg = { .unit_id = ADC_UNIT_1 };
+    ESP_ERROR_CHECK(adc_oneshot_new_unit(&unit_cfg, &adc_unit));
+    for (int i = 0; i < (int)(sizeof(knobs)/sizeof(knobs[0])); ++i) {
+        adc_oneshot_chan_cfg_t chan_cfg = { .bitwidth = ADC_BITWIDTH_DEFAULT, .atten = ADC_ATTEN_DB_11 };
+        ESP_ERROR_CHECK(adc_oneshot_config_channel(adc_unit, knobs[i].ch, &chan_cfg));
+    }
+
+    ControlCtx cctx = {
+        .hv = hv_ctx,
+        .adc = adc_unit,
+        .adc_map = knobs,
+        .adc_count = (int)(sizeof(knobs)/sizeof(knobs[0])),
+        .btn_map = buttons,
+        .btn_count = (int)(sizeof(buttons)/sizeof(buttons[0])),
+    };
+    xTaskCreate(controls_task, "controls", 4096, &cctx, 5, NULL);
+
     run_audio_loop(tx, hv_ctx, num_out_channels);
 }

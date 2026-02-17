@@ -20,4 +20,5 @@ idf_component_register(
         "."
         "hvcc/c"
     REQUIRES driver
+    PRIV_REQUIRES esp_adc
 )

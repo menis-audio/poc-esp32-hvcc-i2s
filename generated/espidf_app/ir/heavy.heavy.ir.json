@@ -5,23 +5,23 @@
         "display": "heavy"
     },
     "objects": {
-        "ljeiPco1": {
+        "GvJTt9Ex": {
             "args": {},
             "type": "__abs~f"
         },
-        "ZkL9B3Fk": {
+        "Mai7gAjj": {
             "args": {},
             "type": "__mul~f"
         },
-        "FyXhkqzR": {
+        "pNUfFk6Z": {
             "args": {},
             "type": "__mul~f"
         },
-        "pZHHUr8e": {
+        "9eXrhrBm": {
             "args": {},
             "type": "__mul~f"
         },
-        "ZbvVcGOg": {
+        "pA8J1DjD": {
             "args": {
                 "k": 0.5,
                 "step": 0,
@@ -29,11 +29,15 @@
             },
             "type": "__var_k~f"
         },
-        "k1FWPDFT": {
+        "bs9A8gyC": {
             "args": {},
             "type": "__sub~f"
         },
-        "4vCwoeFT": {
+        "m06LLO0N": {
+            "args": {},
+            "type": "__mul~f"
+        },
+        "qKBAsWkO": {
             "args": {
                 "k": 6.283185307179586,
                 "step": 0,
@@ -41,15 +45,7 @@
             },
             "type": "__var_k~f"
         },
-        "DlULf6Ok": {
-            "args": {},
-            "type": "__mul~f"
-        },
-        "EbQeg4Vz": {
-            "args": {},
-            "type": "__sub~f"
-        },
-        "QysDh6YL": {
+        "GuKWli3W": {
             "args": {
                 "k": 0.25,
                 "step": 0,
@@ -57,7 +53,11 @@
             },
             "type": "__var_k~f"
         },
-        "2HGAiQtr": {
+        "pG1S53BI": {
+            "args": {},
+            "type": "__sub~f"
+        },
+        "yo1qYkRR": {
             "args": {
                 "k": 0.007833333333333,
                 "step": 0,
@@ -65,14 +65,14 @@
             },
             "type": "__var_k~f"
         },
-        "GznV4RmX": {
+        "TqvHQh5E": {
             "args": {
                 "frequency": 440.0,
-                "phase": 0.0
+                "phase": 0
             },
-            "type": "__phasor_k~f"
+            "type": "__phasor~f"
         },
-        "o7A3pau5": {
+        "5SlcAt4E": {
             "args": {
                 "k": -0.166666666666667,
                 "step": 0,
@@ -80,44 +80,148 @@
             },
             "type": "__var_k~f"
         },
-        "S36gjUcz": {
+        "U0AXMs2E": {
             "args": {},
             "type": "__fma~f"
         },
-        "XpsBxslv": {
+        "t5fyb4Rs": {
             "args": {},
             "type": "__fma~f"
         },
-        "Oajc7w4a": {
+        "MNXT428U": {
+            "args": {},
+            "type": "__line~f"
+        },
+        "JBshe8fc": {
             "args": {},
             "type": "__add~f"
         },
-        "Xt8FdYxK": {
+        "QLPxkn3o": {
             "args": {},
             "type": "__add~f"
         },
-        "LDU1kXpe": {
-            "args": {},
-            "type": "__mul~f"
-        },
-        "6hmtARz1": {
+        "h4HRd9bV": {
             "args": {
                 "k": 0.1,
                 "step": 0,
                 "reverse": 0.0
             },
             "type": "__var_k~f"
+        },
+        "Y0Y2rasY": {
+            "args": {},
+            "type": "__mul~f"
+        },
+        "vxVACY4l": {
+            "args": {
+                "k": 1000.0
+            },
+            "type": "__mul_k"
+        },
+        "mLQvgu9P": {
+            "args": {
+                "local": [
+                    [
+                        "$1",
+                        "50"
+                    ]
+                ],
+                "remote": []
+            },
+            "type": "__message"
+        },
+        "RmYQuWRN": {
+            "args": {
+                "name": "knob1",
+                "extern": "param",
+                "attributes": {
+                    "min": 0.0,
+                    "max": 1.0,
+                    "default": 0.5,
+                    "type": "float"
+                }
+            },
+            "type": "__receive"
         }
     },
     "init": {
         "order": [
-            "GznV4RmX"
+            "MNXT428U",
+            "TqvHQh5E",
+            "vxVACY4l"
         ]
     },
     "tables": {},
     "control": {
-        "receivers": {},
-        "sendMessage": []
+        "receivers": {
+            "knob1": {
+                "display": "knob1",
+                "hash": "0x3A6EC41A",
+                "extern": "param",
+                "attributes": {
+                    "min": 0.0,
+                    "max": 1.0,
+                    "default": 0.5,
+                    "type": "float"
+                },
+                "ids": [
+                    "RmYQuWRN"
+                ]
+            }
+        },
+        "sendMessage": [
+            {
+                "id": "vxVACY4l",
+                "onMessage": [
+                    [
+                        {
+                            "id": "mLQvgu9P",
+                            "inletIndex": 0
+                        }
+                    ]
+                ],
+                "type": null,
+                "extern": "",
+                "attributes": null,
+                "hash": null,
+                "display": null,
+                "name": ""
+            },
+            {
+                "id": "mLQvgu9P",
+                "onMessage": [
+                    [
+                        {
+                            "id": "MNXT428U",
+                            "inletIndex": 0
+                        }
+                    ]
+                ],
+                "type": null,
+                "extern": "",
+                "attributes": null,
+                "hash": null,
+                "display": null,
+                "name": ""
+            },
+            {
+                "id": "RmYQuWRN",
+                "onMessage": [
+                    [
+                        {
+                            "id": "vxVACY4l",
+                            "inletIndex": 0
+                        }
+                    ]
+                ],
+                "type": null,
+                "extern": "",
+                "attributes": null,
+                "hash": null,
+                "display": null,
+                "name": ""
+            }
+        ]
     },
     "signal": {
         "numInputBuffers": 0,
@@ -128,7 +232,7 @@
         },
         "processOrder": [
             {
-                "id": "GznV4RmX",
+                "id": "MNXT428U",
                 "inputBuffers": [],
                 "outputBuffers": [
                     {
@@ -138,7 +242,22 @@
                 ]
             },
             {
-                "id": "ZbvVcGOg",
+                "id": "TqvHQh5E",
+                "inputBuffers": [
+                    {
+                        "type": "~f>",
+                        "index": 0
+                    }
+                ],
+                "outputBuffers": [
+                    {
+                        "type": "~f>",
+                        "index": 0
+                    }
+                ]
+            },
+            {
+                "id": "pA8J1DjD",
                 "inputBuffers": [],
                 "outputBuffers": [
                     {
@@ -148,7 +267,7 @@
                 ]
             },
             {
-                "id": "k1FWPDFT",
+                "id": "bs9A8gyC",
                 "inputBuffers": [
                     {
                         "type": "~f>",
@@ -167,7 +286,7 @@
                 ]
             },
             {
-                "id": "ljeiPco1",
+                "id": "GvJTt9Ex",
                 "inputBuffers": [
                     {
                         "type": "~f>",
@@ -182,7 +301,7 @@
                 ]
             },
             {
-                "id": "QysDh6YL",
+                "id": "GuKWli3W",
                 "inputBuffers": [],
                 "outputBuffers": [
                     {
@@ -192,7 +311,7 @@
                 ]
             },
             {
-                "id": "EbQeg4Vz",
+                "id": "pG1S53BI",
                 "inputBuffers": [
                     {
                         "type": "~f>",
@@ -211,7 +330,7 @@
                 ]
             },
             {
-                "id": "4vCwoeFT",
+                "id": "qKBAsWkO",
                 "inputBuffers": [],
                 "outputBuffers": [
                     {
@@ -221,7 +340,7 @@
                 ]
             },
             {
-                "id": "DlULf6Ok",
+                "id": "m06LLO0N",
                 "inputBuffers": [
                     {
                         "type": "~f>",
@@ -240,7 +359,7 @@
                 ]
             },
             {
-                "id": "pZHHUr8e",
+                "id": "9eXrhrBm",
                 "inputBuffers": [
                     {
                         "type": "~f>",
@@ -259,7 +378,7 @@
                 ]
             },
             {
-                "id": "ZkL9B3Fk",
+                "id": "Mai7gAjj",
                 "inputBuffers": [
                     {
                         "type": "~f>",
@@ -278,7 +397,7 @@
                 ]
             },
             {
-                "id": "FyXhkqzR",
+                "id": "pNUfFk6Z",
                 "inputBuffers": [
                     {
                         "type": "~f>",
@@ -297,7 +416,7 @@
                 ]
             },
             {
-                "id": "2HGAiQtr",
+                "id": "yo1qYkRR",
                 "inputBuffers": [],
                 "outputBuffers": [
                     {
@@ -307,7 +426,7 @@
                 ]
             },
             {
-                "id": "o7A3pau5",
+                "id": "5SlcAt4E",
                 "inputBuffers": [],
                 "outputBuffers": [
                     {
@@ -317,7 +436,7 @@
                 ]
             },
             {
-                "id": "XpsBxslv",
+                "id": "t5fyb4Rs",
                 "inputBuffers": [
                     {
                         "type": "~f>",
@@ -340,7 +459,7 @@
                 ]
             },
             {
-                "id": "S36gjUcz",
+                "id": "U0AXMs2E",
                 "inputBuffers": [
                     {
                         "type": "~f>",
@@ -363,7 +482,7 @@
                 ]
             },
             {
-                "id": "6hmtARz1",
+                "id": "h4HRd9bV",
                 "inputBuffers": [],
                 "outputBuffers": [
                     {
@@ -373,7 +492,7 @@
                 ]
             },
             {
-                "id": "LDU1kXpe",
+                "id": "Y0Y2rasY",
                 "inputBuffers": [
                     {
                         "type": "~f>",
@@ -392,7 +511,7 @@
                 ]
             },
             {
-                "id": "Oajc7w4a",
+                "id": "JBshe8fc",
                 "inputBuffers": [
                     {
                         "type": "~f>",
@@ -411,7 +530,7 @@
                 ]
             },
             {
-                "id": "Xt8FdYxK",
+                "id": "QLPxkn3o",
                 "inputBuffers": [
                     {
                         "type": "~f>",

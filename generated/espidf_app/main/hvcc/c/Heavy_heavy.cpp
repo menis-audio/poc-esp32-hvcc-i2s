@@ -83,7 +83,8 @@ extern "C" {
 
 Heavy_heavy::Heavy_heavy(double sampleRate, int poolKb, int inQueueKb, int outQueueKb)
     : HeavyContext(sampleRate, poolKb, inQueueKb, outQueueKb) {
-  numBytes += sPhasor_k_init(&sPhasor_GznV4RmX, 440.0f, sampleRate);
+  numBytes += sLine_init(&sLine_MNXT428U);
+  numBytes += sPhasor_init(&sPhasor_TqvHQh5E, sampleRate);
   
 }
 
@@ -97,6 +98,10 @@ HvTable *Heavy_heavy::getTableForHash(hv_uint32_t tableHash) {
 
 void Heavy_heavy::scheduleMessageForReceiver(hv_uint32_t receiverHash, HvMessage *m) {
   switch (receiverHash) {
+    case 0x3A6EC41A: { // knob1
+      mq_addMessageByTimestamp(&mq, m, 0, &cReceive_RmYQuWRN_sendMessage);
+      break;
+    }
     default: return;
   }
 }
@@ -104,6 +109,15 @@ void Heavy_heavy::scheduleMessageForReceiver(hv_uint32_t receiverHash, HvMessage
 int Heavy_heavy::getParameterInfo(int index, HvParameterInfo *info) {
   if (info != nullptr) {
     switch (index) {
+      case 0: {
+        info->name = "knob1";
+        info->hash = 0x3A6EC41A;
+        info->type = HvParameterType::HV_PARAM_TYPE_PARAMETER_IN;
+        info->minVal = 0.0f;
+        info->maxVal = 1.0f;
+        info->defaultVal = 0.5f;
+        break;
+      }
       default: {
         info->name = "invalid parameter index";
         info->hash = 0;
@@ -115,7 +129,7 @@ int Heavy_heavy::getParameterInfo(int index, HvParameterInfo *info) {
       }
     }
   }
-  return 0;
+  return 1;
 }
 
 
@@ -124,6 +138,23 @@ int Heavy_heavy::getParameterInfo(int index, HvParameterInfo *info) {
  * Send Function Implementations
  */
 
+
+void Heavy_heavy::cBinop_vxVACY4l_sendMessage(HeavyContextInterface *_c, int letIn, const HvMessage *m) {
+  cMsg_mLQvgu9P_sendMessage(_c, 0, m);
+}
+
+void Heavy_heavy::cMsg_mLQvgu9P_sendMessage(HeavyContextInterface *_c, int letIn, const HvMessage *const n) {
+  HvMessage *m = nullptr;
+  m = HV_MESSAGE_ON_STACK(2);
+  msg_init(m, 2, msg_getTimestamp(n));
+  msg_setElementToFrom(m, 0, n, 0);
+  msg_setFloat(m, 1, 50.0f);
+  sLine_onMessage(_c, &Context(_c)->sLine_MNXT428U, 0, m, NULL);
+}
+
+void Heavy_heavy::cReceive_RmYQuWRN_sendMessage(HeavyContextInterface *_c, int letIn, const HvMessage *m) {
+  cBinop_k_onMessage(_c, NULL, HV_BINOP_MULTIPLY, 1000.0f, 0, m, &cBinop_vxVACY4l_sendMessage);
+}
 
 
 
@@ -180,7 +211,8 @@ int Heavy_heavy::process(float **inputBuffers, float **outputBuffers, int n) {
     __hv_zero_f(VOf(O1));
 
     // process all signal functions
-    __hv_phasor_k_f(&sPhasor_GznV4RmX, VOf(Bf0));
+    __hv_line_f(&sLine_MNXT428U, VOf(Bf0));
+    __hv_phasor_f(&sPhasor_TqvHQh5E, VIf(Bf0), VOf(Bf0));
     __hv_var_k_f(VOf(Bf1), 0.5f, 0.5f, 0.5f, 0.5f, 0.5f, 0.5f, 0.5f, 0.5f);
     __hv_sub_f(VIf(Bf0), VIf(Bf1), VOf(Bf1));
     __hv_abs_f(VIf(Bf1), VOf(Bf1));

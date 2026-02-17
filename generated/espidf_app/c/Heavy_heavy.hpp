@@ -35,9 +35,11 @@
 
 // object includes
 #include "HeavyContext.hpp"
+#include "HvSignalVar.h"
+#include "HvSignalLine.h"
 #include "HvSignalPhasor.h"
 #include "HvMath.h"
-#include "HvSignalVar.h"
+#include "HvControlBinop.h"
 
 class Heavy_heavy : public HeavyContext {
 
@@ -54,6 +56,13 @@ class Heavy_heavy : public HeavyContext {
   int processInlineInterleaved(float *inputBuffers, float *outputBuffer, int n) override;
 
   int getParameterInfo(int index, HvParameterInfo *info) override;
+  struct Parameter {
+    struct In {
+      enum ParameterIn : hv_uint32_t {
+        KNOB1 = 0x3A6EC41A, // knob1
+      };
+    };
+  };
 
  private:
   HvTable *getTableForHash(hv_uint32_t tableHash) override;
@@ -71,9 +80,14 @@ class Heavy_heavy : public HeavyContext {
 
 
   // static sendMessage functions
+  static void cBinop_vxVACY4l_sendMessage(HeavyContextInterface *, int, const HvMessage *);
+  static void cMsg_mLQvgu9P_sendMessage(HeavyContextInterface *, int, const HvMessage *);
+  static void cReceive_RmYQuWRN_sendMessage(HeavyContextInterface *, int, const HvMessage *);
 
   // objects
-  SignalPhasor sPhasor_GznV4RmX;
+  SignalLine sLine_MNXT428U;
+  SignalPhasor sPhasor_TqvHQh5E;
+  ControlBinop cBinop_vxVACY4l;
 };
 
 #endif // _HEAVY_CONTEXT_HEAVY_HPP_

@@ -71,6 +71,16 @@ export ESPPORT=/dev/ttyUSB0
 
 Update the pins in [main/poc_esp32_hvcc_i2s.c](main/poc_esp32_hvcc_i2s.c) if your wiring differs.
 
+## Controls Mapping (Buttons + Knobs)
+- Buttons: GPIO32 → `button1` (pull-up, envia 0/1)
+- Knob (ADC1): GPIO33 (ADC_CHANNEL_5) → `knob1` (0..1)
+
+Use these names inside your Pure Data patch to receive hardware values:
+- `[r button1]` and `[r button2]` for buttons (0 or 1)
+- `[r knob1]` and `[r knob2]` for knobs (0.0 to 1.0)
+
+This mapping is implemented both in the wrapper [main/poc_esp32_hvcc_i2s.c](main/poc_esp32_hvcc_i2s.c) and in the generator template so that generated apps include it automatically.
+
 ## Files of Interest
 - [main/test.pd](main/test.pd): Pure Data patch compiled by HVCC.
 - [main/poc_esp32_hvcc_i2s.c](main/poc_esp32_hvcc_i2s.c): Encapsulated, commented example for I2S + Heavy.
